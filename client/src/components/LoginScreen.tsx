@@ -275,47 +275,68 @@ export default function LoginScreen({ onAuthorized }: LoginScreenProps) {
     // Normalize latest landmarks to stable 128-float vector
     const descriptor = getFaceDescriptor(latestLandmarksRef.current);
 
-    try {
-      const res = await fetch(`${API_BASE_URL}/api/biometrics/identify`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ descriptor })
-      });
-      const data = await res.json();
+    let attemptsCount = 0;
+    const maxRetries = 3;
+    
+    while (attemptsCount < maxRetries) {
+      try {
+        if (attemptsCount > 0) {
+          setStatusMsg(`WAKING NEURAL CORE... RETRY (${attemptsCount}/${maxRetries})`);
+        }
 
-      if (data.identified) {
-        const verifiedName = data.name || 'Operator';
-        setStatusMsg(`IDENTITY VERIFIED: WELCOME ${verifiedName.toUpperCase()}`);
-        setScanState('complete');
-        
-        // Play synthetic entry chime
-        playAccessChime();
+        const res = await fetch(`${API_BASE_URL}/api/biometrics/identify`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ descriptor })
+        });
 
-        setTimeout(() => {
-          onAuthorized(verifiedName, data.role || 'Security Officer');
-        }, 1500);
-      } else {
-        const nextAttempts = attempts + 1;
-        setAttempts(nextAttempts);
-        
-        if (nextAttempts >= 3) {
-          // Trigger Lockdown
-          const lockoutPeriod = 60; // 60 seconds
-          const expiryTime = Date.now() + lockoutPeriod * 1000;
-          localStorage.setItem('red_queen_lockdown_expiry', expiryTime.toString());
-          setScanState('lockout');
-          setLockoutTimeLeft(lockoutPeriod);
-          setStatusMsg('LOCKDOWN INITIATED: INTRUDER BLOCK');
-          startAlarmSound();
+        if (!res.ok) {
+          throw new Error(`HTTP ${res.status}`);
+        }
+
+        const data = await res.json();
+
+        if (data.identified) {
+          const verifiedName = data.name || 'Operator';
+          setStatusMsg(`IDENTITY VERIFIED: WELCOME ${verifiedName.toUpperCase()}`);
+          setScanState('complete');
+          
+          // Play synthetic entry chime
+          playAccessChime();
+
+          setTimeout(() => {
+            onAuthorized(verifiedName, data.role || 'Security Officer');
+          }, 1500);
+        } else {
+          const nextAttempts = attempts + 1;
+          setAttempts(nextAttempts);
+          
+          if (nextAttempts >= 3) {
+            // Trigger Lockdown
+            const lockoutPeriod = 60; // 60 seconds
+            const expiryTime = Date.now() + lockoutPeriod * 1000;
+            localStorage.setItem('red_queen_lockdown_expiry', expiryTime.toString());
+            setScanState('lockout');
+            setLockoutTimeLeft(lockoutPeriod);
+            setStatusMsg('LOCKDOWN INITIATED: INTRUDER BLOCK');
+            startAlarmSound();
+          } else {
+            setScanState('failed');
+            setStatusMsg(`BIO-MATCH FAIL: ACCESS DENIED (${3 - nextAttempts} ATTEMPTS REMAINING)`);
+          }
+        }
+        return; // Success, exit retry loop
+
+      } catch (e) {
+        console.warn(`[BIOMETRICS API RETRY ${attemptsCount + 1}]:`, e);
+        attemptsCount++;
+        if (attemptsCount < maxRetries) {
+          await new Promise((resolve) => setTimeout(resolve, 3000));
         } else {
           setScanState('failed');
-          setStatusMsg(`BIO-MATCH FAIL: ACCESS DENIED (${3 - nextAttempts} ATTEMPTS REMAINING)`);
+          setStatusMsg('API COMMUNICATION ERROR (CHECK SERVER LINK)');
         }
       }
-    } catch (e) {
-      console.error(e);
-      setScanState('failed');
-      setStatusMsg('API COMMUNICATION ERROR');
     }
   };
 
