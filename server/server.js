@@ -9,6 +9,16 @@ const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
+
+// Root Health & System Status Endpoint
+app.get('/', (req, res) => {
+    res.json({
+        status: "ONLINE",
+        system: "RED QUEEN NEURAL MATRIX CORE",
+        version: "1.0.0",
+        message: "Neural Link Established. API Operational."
+    });
+});
 const fs = require('fs');
 const path = require('path');
 const dbPath = path.join(__dirname, 'db', 'users.json');
