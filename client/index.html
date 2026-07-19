@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>The Red Queen | Neural Matrix</title>
+    
+    <!-- Tailwind CSS CDN for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- MediaPipe Libraries for Face Mesh and Camera VAD -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js" crossorigin="anonymous"></script>
+    
+    <!-- Google Fonts for Orbitron and JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
+
+    <style>
+        body { 
+            background-color: #050000; 
+            color: #ff3333; 
+            font-family: 'JetBrains Mono', 'Courier New', monospace; 
+            height: 100vh; 
+            overflow: hidden; 
+            margin: 0;
+            padding: 0;
+        }
+        .matrix-bg { 
+            background: radial-gradient(circle, #1a0000 0%, #000000 100%); 
+        }
+        .glitch-text { 
+            text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000; 
+            font-family: 'Orbitron', sans-serif;
+        }
+        .cyan-glitch-text {
+            text-shadow: 0 0 5px #00f0ff, 0 0 10px #00f0ff;
+            font-family: 'Orbitron', sans-serif;
+        }
+        /* Custom scrollbar for cyberpunk look */
+        ::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(10, 0, 0, 0.5);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #ff3333;
+            border-radius: 2px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ff0000;
+        }
+    </style>
+</head>
+<body class="matrix-bg">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+</body>
+</html>

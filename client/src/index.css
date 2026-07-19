@@ -1,0 +1,128 @@
+body, html { 
+  margin: 0; 
+  padding: 0; 
+  height: 100%; 
+  overflow: hidden; 
+  background: #050000; 
+  color: #ff3333;
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+}
+
+/* CRT Screen Scanline Overlay */
+.crt-overlay::before {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+  z-index: 10;
+  background-size: 100% 4px, 6px 100%;
+  pointer-events: none;
+}
+
+/* Matrix Background overlay */
+.matrix-bg {
+  background: radial-gradient(circle, #150000 0%, #000000 100%);
+}
+
+/* Cyberpunk terminal text shadows */
+.red-glow {
+  text-shadow: 0 0 4px rgba(255, 51, 51, 0.6), 0 0 10px rgba(255, 51, 51, 0.4);
+}
+
+.cyan-glow {
+  text-shadow: 0 0 4px rgba(0, 240, 255, 0.6), 0 0 10px rgba(0, 240, 255, 0.4);
+}
+
+/* Custom Grid/Crosshair background */
+.scanner-grid {
+  background-image: 
+    linear-gradient(rgba(255, 51, 51, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 51, 51, 0.08) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* Keyframes for futuristic scanner line */
+@keyframes scan-anim {
+  0% {
+    top: 0%;
+  }
+  50% {
+    top: 100%;
+  }
+  100% {
+    top: 0%;
+  }
+}
+
+.scan-line {
+  position: absolute;
+  height: 2px;
+  width: 100%;
+  background: linear-gradient(to right, transparent, rgba(255, 51, 51, 0.8), transparent);
+  box-shadow: 0 0 8px rgba(255, 51, 51, 0.8);
+  animation: scan-anim 4s linear infinite;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* Glitch animation */
+@keyframes glitch {
+  0% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-2px, 2px);
+  }
+  40% {
+    transform: translate(-2px, -2px);
+  }
+  60% {
+    transform: translate(2px, 2px);
+  }
+  80% {
+    transform: translate(2px, -2px);
+  }
+  100% {
+    transform: translate(0);
+  }
+}
+
+.animate-glitch {
+  animation: glitch 1s linear infinite;
+}
+
+/* Custom button states */
+.system-btn {
+  background: rgba(51, 0, 0, 0.4);
+  border: 1px solid rgba(255, 51, 51, 0.5);
+  color: #ff3333;
+  transition: all 0.2s ease-in-out;
+}
+
+.system-btn:hover:not(:disabled) {
+  background: #ff3333;
+  color: #000000;
+  box-shadow: 0 0 15px rgba(255, 0, 0, 0.8);
+  border-color: #ff0000;
+}
+
+.system-btn:disabled {
+  border-color: rgba(255, 51, 51, 0.2);
+  color: rgba(255, 51, 51, 0.3);
+  cursor: not-allowed;
+}
+
+.cyan-btn {
+  background: rgba(0, 40, 50, 0.4);
+  border: 1px solid rgba(0, 240, 255, 0.5);
+  color: #00f0ff;
+  transition: all 0.2s ease-in-out;
+}
+
+.cyan-btn:hover:not(:disabled) {
+  background: #00f0ff;
+  color: #000000;
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.8);
+  border-color: #00f0ff;
+}
