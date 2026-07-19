@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { getFaceDescriptor } from '../utils/faceDescriptor';
 import RedQueenAvatar, { AvatarMode } from './RedQueenAvatar';
+import { API_BASE_URL } from '../utils/apiConfig';
 
 interface LoginScreenProps {
   onAuthorized: (name: string, role: string) => void;
@@ -275,7 +276,7 @@ export default function LoginScreen({ onAuthorized }: LoginScreenProps) {
     const descriptor = getFaceDescriptor(latestLandmarksRef.current);
 
     try {
-      const res = await fetch('/api/biometrics/identify', {
+      const res = await fetch(`${API_BASE_URL}/api/biometrics/identify`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ descriptor })

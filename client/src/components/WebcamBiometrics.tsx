@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { API_BASE_URL } from '../utils/apiConfig';
 
 interface WebcamBiometricsProps {
   onAuthorized: (name: string) => void;
@@ -222,7 +223,7 @@ export default function WebcamBiometrics({
       // Mock descriptor representing the user's face (length 128 as expected by face-api)
       const mockDescriptor = Array.from({ length: 128 }, () => Math.random());
 
-      const res = await fetch('/api/biometrics/identify', {
+      const res = await fetch(`${API_BASE_URL}/api/biometrics/identify`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ descriptor: mockDescriptor }),

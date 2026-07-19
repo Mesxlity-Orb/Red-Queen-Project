@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { getFaceDescriptor } from '../utils/faceDescriptor';
 import ApiIntegrationDemo from './ApiIntegrationDemo';
+import { API_BASE_URL } from '../utils/apiConfig';
 
 type UserProfile = {
   name: string;
@@ -29,7 +30,7 @@ export default function BackendManager() {
   // Fetch users list
   const fetchUsers = async () => {
     try {
-      const res = await fetch('/api/biometrics/users');
+      const res = await fetch(`${API_BASE_URL}/api/biometrics/users`);
       if (res.ok) {
         const data = await res.ok ? await res.json() : [];
         setUsers(data);
@@ -48,7 +49,7 @@ export default function BackendManager() {
     if (!confirm(`Are you sure you want to remove the security profile for ${name}?`)) return;
 
     try {
-      const res = await fetch(`/api/biometrics/users/${encodeURIComponent(name)}`, {
+      const res = await fetch(`${API_BASE_URL}/api/biometrics/users/${encodeURIComponent(name)}`, {
         method: 'DELETE'
       });
       if (res.ok) {
@@ -261,7 +262,7 @@ export default function BackendManager() {
     const descriptor = getFaceDescriptor(latestLandmarksRef.current);
 
     try {
-      const res = await fetch('/api/biometrics/register', {
+      const res = await fetch(`${API_BASE_URL}/api/biometrics/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
