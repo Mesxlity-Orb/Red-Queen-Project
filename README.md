@@ -3,7 +3,7 @@
 [![License](https://img.shields.io/badge/License-All_Rights_Reserved-red.svg)](LICENSE)
 
 > **Umbrella Corporation Artificial Intelligence Core System**  
-> Developed by **MesxlitySolutions (Rabih Rizkallah)**
+> Developed by **MesxlitySolutions**
 
 ---
 
