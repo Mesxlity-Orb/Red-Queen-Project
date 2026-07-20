@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { getFaceDescriptor } from '../utils/faceDescriptor';
+import { apiFetch, pingBackend } from '../utils/apiConfig';
 import RedQueenAvatar, { AvatarMode } from './RedQueenAvatar';
-import { API_BASE_URL } from '../utils/apiConfig';
 
 interface LoginScreenProps {
   onAuthorized: (name: string, role: string) => void;
@@ -24,6 +24,9 @@ export default function LoginScreen({ onAuthorized }: LoginScreenProps) {
   const streamRef = useRef<MediaStream | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
   const alarmIntervalRef = useRef<any>(null);
+
+  // Ping backend on mount to wake Render from sleep before any real request
+  useEffect(() => { pingBackend(); }, []);
 
   // Check if already in lockdown on mount
   useEffect(() => {
@@ -284,7 +287,7 @@ export default function LoginScreen({ onAuthorized }: LoginScreenProps) {
           setStatusMsg(`WAKING NEURAL CORE... RETRY (${attemptsCount}/${maxRetries})`);
         }
 
-        const res = await fetch(`${API_BASE_URL}/api/biometrics/identify`, {
+        const res = await apiFetch('/api/biometrics/identify', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ descriptor })

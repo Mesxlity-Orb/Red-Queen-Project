@@ -5,6 +5,10 @@
 > **Umbrella Corporation Artificial Intelligence Core System**  
 > Developed by **MesxlitySolutions**
 
+📋 **[Jury Evaluation & Biometric Registration Guide](JURY_GUIDE.md)**  
+💻 **Recommended Mode**: Run locally for zero-latency evaluation  
+🔐 **Local Admin Gateway**: `http://localhost:5173/backend` *(Password: `P@ssw0rd`)*
+
 ---
 
 ## 📌 Project Overview
